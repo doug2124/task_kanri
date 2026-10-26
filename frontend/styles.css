@@ -128,6 +128,15 @@
   .primary:hover {
     background: #5148c4;
   }
+  .secondary {
+    background: #22c55e;
+    color: white;
+    padding: 13px 18px;
+  }
+
+  .secondary:hover {
+    background: #1eac52;
+  }
 
   .generate-row .primary {
     flex-shrink: 0;
@@ -213,15 +222,15 @@
     border-color: #635bdb;
   }
 
-  .task-actions {
+ 
+  .task-actions.hidden {
+  display: none;
+  }
+   .task-actions {
     display: flex;
     gap: 6px;
     flex-shrink: 0;
   }
-  .task-actions.hidden {
-  display: none;
-  }
-
   .task-actions button {
     padding: 7px 9px;
     background: #f5f5fa;
@@ -247,6 +256,10 @@
   .add-row input {
     flex: 1;
     min-width: 0;
+  }
+  #taskList li.empty {
+    display: block;
+    text-align: center;
   }
 
   .empty {

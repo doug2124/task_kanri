@@ -3,7 +3,7 @@ const taskList = document.getElementById("taskList");
     const progressBar = document.getElementById("progressBar");
     const message = document.getElementById("message");
     const generateBtn = document.getElementById("generateBtn");
-
+    const saveBtn = document.getElementById("saveBtn");
     async function generateTasks() {
       const goal = document.getElementById("goalInput")
         .value.trim();
@@ -35,10 +35,14 @@ const taskList = document.getElementById("taskList");
 
         const tasks = await response.json();
 
+
         if (!Array.isArray(tasks)) {
           throw new Error("タスクを生成できませんでした。APIの応答が不正です。");
         }
-
+        currentGoal = goal;
+        currentTasks = tasks;
+        console.log("Goals:", currentGoal);
+        console.log("Generated tasks:", currentTasks);
         taskList.innerHTML = "";
 
         tasks.forEach(createTaskElement);
@@ -181,3 +185,29 @@ const taskList = document.getElementById("taskList");
 
       taskList.appendChild(li);
     }
+  async function saveTasks() {
+    try{
+      const goal = document.getElementById("goalInput").value.trim();
+      const tasks = [...document.querySelectorAll(".task-text")]
+      .map(el => el.textContent);
+      console.log("Saving tasks:", goal, tasks);
+      const response = await fetch(
+        "http://localhost:3000/api/save",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            goal: goal,
+            tasks : tasks
+          })
+        }
+      );const result = await response.json();
+      if (response.ok) {
+        console.log("Tasks saved successfully:", result);
+      }
+    } catch (error) {
+      console.error("Error saving tasks:", error);
+    }
+  }
