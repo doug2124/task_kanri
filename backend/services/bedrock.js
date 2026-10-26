@@ -3,21 +3,21 @@ const {
     InvokeModelCommand
   } = require("@aws-sdk/client-bedrock-runtime");
   
-  const secrets = require("../secrets");
+  //const secrets = require("../secrets");
   const client =
   new BedrockRuntimeClient({
     region: "ap-northeast-1",
-    credentials: {
-    accessKeyId: secrets.AWS_ACCESS_KEY_ID,
-    secretAccessKey: secrets.AWS_SECRET_ACCESS_KEY,
-    sessionToken: secrets.AWS_SESSION_TOKEN,
-  },
+    //credentials: {
+    //accessKeyId: secrets.AWS_ACCESS_KEY_ID,
+    //secretAccessKey: secrets.AWS_SECRET_ACCESS_KEY,
+    //sessionToken: secrets.AWS_SESSION_TOKEN,
+  //},
   });
   
   async function generateTasks(goal) {
   
     const prompt = `
-  目的を達成するためのタスクを、箇条書きで5つ生成してください。
+  目的を達成するためのタスクを、箇条書きでいくつにしてもよいけれど、最大で10個までに収める
   
   ${goal}
   何も説明しない
