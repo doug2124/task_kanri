@@ -3,23 +3,24 @@ const {
     InvokeModelCommand
   } = require("@aws-sdk/client-bedrock-runtime");
   
-  //const secrets = require("../secrets");
+  const secrets = require("../secrets");
   const client =
   new BedrockRuntimeClient({
     region: "ap-northeast-1",
-    //credentials: {
-    //accessKeyId: secrets.AWS_ACCESS_KEY_ID,
-    //secretAccessKey: secrets.AWS_SECRET_ACCESS_KEY,
-    //sessionToken: secrets.AWS_SESSION_TOKEN,
-  //},
+    credentials: {
+    accessKeyId: secrets.AWS_ACCESS_KEY_ID,
+    secretAccessKey: secrets.AWS_SECRET_ACCESS_KEY,
+    sessionToken: secrets.AWS_SESSION_TOKEN,
+  },
   });
   
   async function generateTasks(goal) {
   
     const prompt = `
-  目的を達成するためのタスクを、箇条書きでいくつにしてもよいけれど、最大で10個までに収める
+  目的を達成するためのタスクを、箇条書きで最大で10個までに収める
   
   ${goal}
+  必ず日本語で返事
   何も説明しない
   markdownは禁止
   \`\`\`.は禁止
@@ -36,15 +37,9 @@ const {
     const command =
     new InvokeModelCommand({
   
-      modelId:
-      "apac.amazon.nova-micro-v1:0",
-  
-      contentType:
-      "application/json",
-  
-      accept:
-      "application/json",
-  
+      modelId:"apac.amazon.nova-micro-v1:0",
+      contentType:"application/json",
+      accept:"application/json", 
       body: JSON.stringify({
         messages: [
           {
@@ -59,9 +54,8 @@ const {
       })
     });
   
-    const response =
-      await client.send(command);
-  
+    const response =await client.send(command);
+    console.log("response", response);
     const body =
       JSON.parse(
         new TextDecoder()
