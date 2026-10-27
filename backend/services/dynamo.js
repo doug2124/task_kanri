@@ -1,7 +1,9 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const {
   DynamoDBDocumentClient,
-  PutCommand
+  PutCommand,
+  ScanCommand,
+  GetCommand,
 } = require("@aws-sdk/lib-dynamodb");
 
 const secrets = require("../secrets");
@@ -35,4 +37,26 @@ async function saveTasksToDynamo(goal, tasks) {
   return { success: true };
 }
 
-module.exports = { saveTasksToDynamo };
+async function getTasksFromDynamo() {
+  const result = await dynamo.send(
+    new ScanCommand({
+      TableName: "Tasks",
+    })
+  );
+  console.log(result);
+  return result.Items;
+}
+async function getTaskByGoalId(userId, goalId) {
+  const result = await dynamo.send(
+    new GetCommand({
+      TableName: "Tasks",
+      Key: {
+        userId,
+        goalId
+      }
+    })
+  );
+  console.log(result);
+  return result.Item;
+}
+module.exports = { saveTasksToDynamo, getTasksFromDynamo, getTaskByGoalId };
