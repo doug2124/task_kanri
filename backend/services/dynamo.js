@@ -4,6 +4,7 @@ const {
   PutCommand,
   ScanCommand,
   GetCommand,
+  DeleteCommand,
 } = require("@aws-sdk/lib-dynamodb");
 
 const secrets = require("../secrets");
@@ -59,4 +60,22 @@ async function getTaskByGoalId(userId, goalId) {
   console.log(result);
   return result.Item;
 }
-module.exports = { saveTasksToDynamo, getTasksFromDynamo, getTaskByGoalId };
+async function deleteGoal(goalId){
+console.log("deleting goal id:",goalId);
+try{
+const result =await dynamo.send(
+  new DeleteCommand({
+    TableName:"Tasks",
+    Key:{
+      userId:"user123",
+      goalId:goalId
+    }
+  })
+)}catch(error){
+  console.error("DELETE ERROR:",error);
+  res.status(500).json({
+    error:error.message
+  })
+};
+}
+module.exports = { saveTasksToDynamo, getTasksFromDynamo, getTaskByGoalId,deleteGoal};

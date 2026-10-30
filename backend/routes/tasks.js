@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const generateTasks = require("../services/bedrock");
-const {saveTasksToDynamo,getTasksFromDynamo}= require("../services/dynamo");
+const {saveTasksToDynamo,getTasksFromDynamo,deleteGoal}= require("../services/dynamo");
 
 
 console.log("saveTasksToDynamo", saveTasksToDynamo);
@@ -65,6 +65,27 @@ router.get("/tasks/:goalId", async (req, res) => {
 
     res.status(500).json({
       error: "Failed to retrieve task"
+    });
+  }
+});
+router.delete("/tasks/:goalId", async (req, res) => {
+
+  const { goalId } = req.params;
+
+  try {
+
+    await deleteGoal(goalId);
+
+    res.json({
+      message: "Deleted successfully"
+    });
+
+  } catch (error) {
+
+    console.error("DELETE ERROR:", error);
+
+    res.status(500).json({
+      error: error.message
     });
   }
 });
