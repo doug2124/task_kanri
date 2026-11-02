@@ -19,7 +19,7 @@ const taskList = document.getElementById("taskList");
 
       try {
         const response = await fetch(
-          "http://localhost:3000/api/generate",
+          "/api/generate",
           {
             method: "POST",
             headers: {
@@ -192,7 +192,7 @@ const taskList = document.getElementById("taskList");
       .map(el => el.textContent);
       console.log("Saving tasks:", goal, tasks);
       const response = await fetch(
-        "http://localhost:3000/api/save",
+        "/api/save",
         {
           method: "POST",
           headers: {
@@ -204,6 +204,9 @@ const taskList = document.getElementById("taskList");
           })
         }
       );const result = await response.json();
+      const shareUrl=
+      `${window.location.origin}/task-detail.html?goalId=${result.goalId}`;
+      console.log("Share URL:",shareUrl);
       if (response.ok) {
         console.log("Tasks saved successfully:", result);
       }
@@ -211,3 +214,91 @@ const taskList = document.getElementById("taskList");
       console.error("Error saving tasks:", error);
     }
   }
+  async function loadTasks() {
+  try {
+    const response = await fetch(
+      "/api/tasks"
+    );
+
+    const data = await response.json();
+
+    const container =
+      document.getElementById("savedTasks");
+
+    container.innerHTML = "";
+
+    data.forEach(item => {
+
+    renderSavedTask(item)
+
+  });
+    
+  } catch (error) {
+    console.error(error);
+  }
+}
+function renderSavedTask(item) {
+
+  const container =
+    document.getElementById("savedTasks");
+
+  const row = document.createElement("div");
+  row.className = "saved-task-row";
+
+  const goalDiv = document.createElement("span");
+  goalDiv.textContent = item.goal;
+  goalDiv.className = "saved-goal";
+
+  goalDiv.onclick=()=>{
+    window.open(`task-detail.html?goalId=${item.goalId}`,"_blank");
+  };
+
+  const shareBtn = document.createElement("button");
+  shareBtn.textContent = "共有";
+
+  shareBtn.onclick = () => {
+
+    const shareUrl =
+      `${window.location.origin}/task-detail.html?goalId=${item.goalId}`;
+
+    navigator.clipboard.writeText(
+      shareUrl
+    );
+
+    alert("リンクをコピーしました");
+  };
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "削除";
+  deleteBtn.className = "delete";
+
+  deleteBtn.onclick = async () => {
+
+    if (!confirm("削除しますか？")) {
+      return;
+    }
+
+    await fetch(
+      `http://localhost:3000/api/tasks/${item.goalId}`,
+      {
+        method: "DELETE"
+      }
+    );
+
+    row.remove();
+  };
+
+  row.append(
+    goalDiv,
+    shareBtn,
+    deleteBtn
+  );
+
+  container.appendChild(row);
+}
+const params = new URLSearchParams(
+  window.location.search
+);
+
+const goalId = params.get("goalId");  
+window.onload=loadTasks;

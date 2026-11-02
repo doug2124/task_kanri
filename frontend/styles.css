@@ -98,7 +98,23 @@
     border-color: #635bdb;
     box-shadow: 0 0 0 3px #635bdb18;
   }
-
+  .goal-link{
+    cursor: pointer;
+  }
+  summary {
+    cursor: pointer;
+    color: #2563eb;
+  }
+  summary:hover {
+  text-decoration: underline;
+  }
+  .saved-goal {
+  cursor: pointer;
+  }
+  .saved-goal:hover {
+    color: #2563eb;
+    text-decoration: underline;
+  }
   .generate-row {
     display: flex;
     gap: 10px;
@@ -276,6 +292,19 @@
     color: #d33;
     line-height: 1.5;
   }
+  .saved-task-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid #ddd;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+.saved-task-row button {
+  display: inline-block;
+}
+
 
   @media (max-width: 520px) {
     header {
