@@ -1,11 +1,18 @@
 FROM node:20
 
+WORKDIR /app
+
+COPY backend/package*.json ./backend/
+
 WORKDIR /app/backend
-
-COPY . .
-
 RUN npm install
+
+WORKDIR /app
+COPY backend ./backend
+COPY frontend ./frontend
+
+WORKDIR /app/backend
 
 EXPOSE 3000
 
-CMD ["node", "backend/server.js"]
+CMD ["npm", "start"]

@@ -19,7 +19,7 @@ const taskList = document.getElementById("taskList");
 
       try {
         const response = await fetch(
-          "/api/generate",
+          "http://localhost:3000/api/generate",
           {
             method: "POST",
             headers: {
@@ -209,15 +209,17 @@ const taskList = document.getElementById("taskList");
       console.log("Share URL:",shareUrl);
       if (response.ok) {
         console.log("Tasks saved successfully:", result);
+        alert("タスクを保存しました。");
       }
     } catch (error) {
       console.error("Error saving tasks:", error);
+      alert("タスクの保存に失敗しました。");
     }
   }
   async function loadTasks() {
   try {
     const response = await fetch(
-      "/api/tasks"
+      "http://localhost:3000/api/tasks"
     );
 
     const data = await response.json();
