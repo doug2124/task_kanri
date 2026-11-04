@@ -266,3 +266,5 @@ EC2 (Amazon Linux 2023)
 - goalId を共有URLとして利用
 - 共有ユーザー管理テーブル追加
 - DynamoDBで共有権限管理
+
+aws ecr get-login-password --region ap-northeast-1 | \ docker login --username AWS --password-stdin 246168591341 .dkr.ecr.ap-northeast-1.amazonaws.com

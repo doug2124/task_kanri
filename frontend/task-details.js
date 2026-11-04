@@ -11,7 +11,7 @@ console.log("goalId =", goalId);
 async function loadTaskDetail() {
 
   const response = await fetch(
-    `http://localhost:3000/api/tasks/${goalId}`
+    `/api/tasks/${goalId}`
   );
 
   const data = await response.json();
@@ -81,6 +81,8 @@ async function saveTaskChanges() {
 
   const payload = {
     goalId,
+    purpose:
+    purposeInput.value,
     tasks
   };
 
@@ -89,15 +91,14 @@ async function saveTaskChanges() {
   );
 
   await fetch(
-    `http://localhost:3000/api/save`,
+    `/api/edit-task/${goalId}`,
     {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(payload)
     }
-  );
+  ); 
 }
 loadTaskDetail();
-``
