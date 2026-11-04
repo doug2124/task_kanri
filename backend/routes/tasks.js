@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const generateTasks = require("../services/bedrock");
-const {saveTasksToDynamo,getTasksFromDynamo,deleteGoal}= require("../services/dynamo");
+const {saveTasksToDynamo,getTasksFromDynamo,deleteGoal,updateTask}= require("../services/dynamo");
 
 
 console.log("saveTasksToDynamo", saveTasksToDynamo);
@@ -87,6 +87,18 @@ router.delete("/tasks/:goalId", async (req, res) => {
     res.status(500).json({
       error: error.message
     });
+  }
+});
+router.put("/edit-task/:goalId", async (req, res) => {
+
+  const { goalId } = req.params;
+  const { purpose, tasks } = req.body;
+  try{
+    const result = await updateTask(goalId, tasks);
+    res.json(result);
+  } catch (error) {
+    console.error("Error editing task:", error);
+    res.status(500).json({ error: "Failed to edit task" });
   }
 });
 module.exports = router;

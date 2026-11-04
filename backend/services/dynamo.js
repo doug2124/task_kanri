@@ -78,4 +78,18 @@ const result =await dynamo.send(
   })
 };
 }
-module.exports = { saveTasksToDynamo, getTasksFromDynamo, getTaskByGoalId,deleteGoal};
+async function updateTask(goalId, tasks) {
+  await dynamo.send(
+    new UpdateCommand({
+      TableName: TABLE_NAME,
+      Key: {
+        goalId: goalId
+      },
+      UpdateExpression: "SET tasks = :tasks",
+      ExpressionAttributeValues: {
+        ":tasks": tasks
+      }
+    })
+  );
+}
+module.exports = { saveTasksToDynamo, getTasksFromDynamo, getTaskByGoalId,deleteGoal, updateTask};
