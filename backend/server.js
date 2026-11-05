@@ -19,7 +19,12 @@ app.use("/api", generateRoute);
 app.use("/api",saveRoute);
 app.use("/api",deleteRoute);
 
-const server = app.listen(3000, () => {
-  console.log("Server running");
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
 });
-console.log(server.address());
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+});

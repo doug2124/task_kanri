@@ -81,8 +81,6 @@ async function saveTaskChanges() {
 
   const payload = {
     goalId,
-    purpose:
-    purposeInput.value,
     tasks
   };
 
@@ -91,7 +89,7 @@ async function saveTaskChanges() {
   );
 
   await fetch(
-    `/api/edit-task/${goalId}`,
+    `/api/tasks/${goalId}`,
     {
       method: "PUT",
       headers: {
@@ -99,6 +97,6 @@ async function saveTaskChanges() {
       },
       body: JSON.stringify(payload)
     }
-  ); 
+  );
 }
 loadTaskDetail();

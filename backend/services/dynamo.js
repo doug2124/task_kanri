@@ -5,17 +5,11 @@ const {
   ScanCommand,
   GetCommand,
   DeleteCommand,
+  UpdateCommand
 } = require("@aws-sdk/lib-dynamodb");
-
-const secrets = require("../secrets");
 
 const client = new DynamoDBClient({
   region: "ap-northeast-1",
-  credentials: {
-    accessKeyId: secrets.AWS_ACCESS_KEY_ID,
-    secretAccessKey: secrets.AWS_SECRET_ACCESS_KEY,
-    sessionToken: secrets.AWS_SESSION_TOKEN,
-  },
 });
 
 const dynamo = DynamoDBDocumentClient.from(client);
@@ -79,10 +73,12 @@ const result =await dynamo.send(
 };
 }
 async function updateTask(goalId, tasks) {
+  const TABLE_NAME = "Tasks";
   await dynamo.send(
     new UpdateCommand({
       TableName: TABLE_NAME,
       Key: {
+        userId: userId,
         goalId: goalId
       },
       UpdateExpression: "SET tasks = :tasks",

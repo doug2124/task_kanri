@@ -89,12 +89,12 @@ router.delete("/tasks/:goalId", async (req, res) => {
     });
   }
 });
-router.put("/edit-task/:goalId", async (req, res) => {
+router.put("/tasks/:goalId", async (req, res) => {
 
   const { goalId } = req.params;
-  const { purpose, tasks } = req.body;
+  const {tasks } = req.body;
   try{
-    const result = await updateTask(goalId, tasks);
+    const result = await updateTask("user123",goalId, tasks);
     res.json(result);
   } catch (error) {
     console.error("Error editing task:", error);

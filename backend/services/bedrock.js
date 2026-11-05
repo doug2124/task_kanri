@@ -3,15 +3,9 @@ const {
     InvokeModelCommand
   } = require("@aws-sdk/client-bedrock-runtime");
   
-  const secrets = require("../secrets");
   const client =
   new BedrockRuntimeClient({
     region: "ap-northeast-1",
-    credentials: {
-    accessKeyId: secrets.AWS_ACCESS_KEY_ID,
-    secretAccessKey: secrets.AWS_SECRET_ACCESS_KEY,
-    sessionToken: secrets.AWS_SESSION_TOKEN,
-  },
   });
   
   async function generateTasks(goal) {
