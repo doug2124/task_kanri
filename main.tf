@@ -1,4 +1,3 @@
-
 terraform {
   required_version = ">= 1.5.0"
 
@@ -8,6 +7,14 @@ terraform {
       version = "~> 6.0"
     }
   }
+}
+variable "aws_access_key" {
+  type = string
+}
+
+variable "aws_secret_key" {
+  type      = string
+  sensitive = true
 }
 
 variable "aws_region" {
@@ -32,6 +39,8 @@ variable "bedrock_model_id" {
 
 provider "aws" {
   region = var.aws_region
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
 }
 
 data "aws_availability_zones" "available" {
@@ -188,10 +197,10 @@ resource "aws_security_group" "alb" {
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = var.container_port
+    to_port     = var.container_port
+    protocol    = "tcp"
+    security_groups = [aws_security_group.ecs.id]
   }
 }
 
@@ -211,9 +220,9 @@ resource "aws_security_group" "ecs" {
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
@@ -280,7 +289,6 @@ resource "aws_iam_role_policy_attachment" "ecs_execution" {
 # =====================================
 # IAM - ECS TASK ROLE
 # =====================================
-
 resource "aws_iam_role" "ecs_task" {
   name = "${var.project_name}-task-role"
 
@@ -332,7 +340,6 @@ resource "aws_iam_role_policy" "app_permissions" {
     ]
   })
 }
-
 # =====================================
 # CLOUDWATCH LOGS
 # =====================================
