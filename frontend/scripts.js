@@ -189,7 +189,10 @@ const taskList = document.getElementById("taskList");
     try{
       const goal = document.getElementById("goalInput").value.trim();
       const tasks = [...document.querySelectorAll(".task-text")]
-      .map(el => el.textContent);
+      .map(el => ({
+        text: el.textContent,
+        completed: el.classList.contains("done")
+      }));
       console.log("Saving tasks:", goal, tasks);
       const response = await fetch(
         "/api/save",

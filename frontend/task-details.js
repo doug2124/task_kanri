@@ -98,5 +98,6 @@ async function saveTaskChanges() {
       body: JSON.stringify(payload)
     }
   );
+  alert("タスクが保存されました");
 }
 loadTaskDetail();
