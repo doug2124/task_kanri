@@ -30,7 +30,7 @@ async function loadTaskDetail() {
 
     const span = document.createElement("span");
     span.className = "task-text";
-    span.textContent = task;
+    span.textContent = task.text;
 
     const complete = document.createElement("button");
     complete.textContent = "完了";

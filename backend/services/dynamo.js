@@ -72,9 +72,9 @@ const result =await dynamo.send(
   })
 };
 }
-async function updateTask(goalId, tasks) {
+async function updateTask(userId,goalId, tasks) {
   const TABLE_NAME = "Tasks";
-  await dynamo.send(
+  const result =await dynamo.send(
     new UpdateCommand({
       TableName: TABLE_NAME,
       Key: {
@@ -87,5 +87,6 @@ async function updateTask(goalId, tasks) {
       }
     })
   );
+  return result;
 }
 module.exports = { saveTasksToDynamo, getTasksFromDynamo, getTaskByGoalId,deleteGoal, updateTask};
