@@ -8,14 +8,6 @@ terraform {
     }
   }
 }
-variable "aws_access_key" {
-  type = string
-}
-
-variable "aws_secret_key" {
-  type      = string
-  sensitive = true
-}
 
 variable "aws_region" {
   default = "ap-northeast-1"
@@ -39,8 +31,6 @@ variable "bedrock_model_id" {
 
 provider "aws" {
   region = var.aws_region
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
 }
 
 data "aws_availability_zones" "available" {
@@ -224,6 +214,17 @@ resource "aws_security_group" "ecs" {
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+resource "aws_security_group" "bedrock_endpoint" {
+  name   = "${var.project_name}-bedrock-endpoint-sg"
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ecs.id]
   }
 }
 
@@ -494,6 +495,40 @@ resource "aws_ecs_service" "app" {
   ]
 }
 
+#vpc endpoint
+
+resource "aws_vpc_endpoint" "dynamodb" {
+  vpc_id            = aws_vpc.main.id
+  service_name      = "com.amazonaws.${var.aws_region}.dynamodb"
+  vpc_endpoint_type = "Gateway"
+
+  route_table_ids = [
+    aws_route_table.private.id
+  ]
+
+  tags = {
+    Name = "${var.project_name}-dynamodb-endpoint"
+  }
+}
+resource "aws_vpc_endpoint" "bedrock" {
+  vpc_id = aws_vpc.main.id
+
+  service_name = "com.amazonaws.${var.aws_region}.bedrock-runtime"
+
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = aws_subnet.private[*].id
+
+  security_group_ids = [
+    aws_security_group.bedrock_endpoint.id
+  ]
+
+  private_dns_enabled = true
+
+  tags = {
+    Name = "${var.project_name}-bedrock-endpoint"
+  }
+}
 # =====================================
 # OUTPUTS
 # =====================================
