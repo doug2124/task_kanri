@@ -7,7 +7,7 @@ set -e
 AWS_REGION="ap-northeast-1"
 AWS_ACCOUNT_ID="518014098041"
 ECR_REPOSITORY="task-manager"
-IMAGE_TAG="latest"
+IMAGE_TAG="v4"
 
 ECR_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}"
 
